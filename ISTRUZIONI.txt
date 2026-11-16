@@ -1,0 +1,13 @@
+ATOMIC MOBILE - PUBBLICAZIONE GITHUB PAGES (V1.0.62 DEMO)
+
+1. Apri https://github.com/MrCaccolino/atomic-mobile
+2. Add file > Upload files
+3. Estrai questo ZIP e carica i 4 file nella RADICE del repository: index.html, mobile-manifest.webmanifest, mobile-sw.js, atomic-mobile-icon.svg.
+4. Commit changes. Aspetta la pubblicazione Pages.
+5. Apri https://mrcaccolino.github.io/atomic-mobile/ da iPhone Safari. Condividi > Aggiungi alla schermata Home.
+
+IMPORTANTE: questa e' una DEMO della pagina mobile indipendente dal PC per la registrazione locale e backup; non realizza ancora un sistema multi-famiglia sicuro o la sincronizzazione bidirezionale.
+GitHub Pages e' hosting STATICO e non fornisce backend per autenticazione, profili, QR monouso o sincronizzazione.
+Non caricare dati finanziari, token, backup o file desktop nel repository pubblico.
+Il codice della PWA sara' pubblicamente visibile.
+I dati locali del browser non si trasferiscono automaticamente tra Safari e PWA installata, e possono essere cancellati: usare backup regolari.
