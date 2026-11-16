@@ -1,0 +1,1 @@
+V1.0.66: carica i quattro file della cartella GITHUB_PAGES nel repository GitHub. Sul desktop accedi al profilo, premi Visualizza QR Code e inquadra il codice con il telefono. Il QR contiene nomi di conti e profili: non condividerlo. Per aggiornare i conti scansiona di nuovo il QR. Nessuna sincronizzazione automatica o autenticazione sicura.
