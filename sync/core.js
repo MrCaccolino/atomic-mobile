@@ -8,7 +8,13 @@ function percent(value){if(value===''||value===null||value===undefined)fail('Per
 function allocate(amount,weights){if(!Number.isSafeInteger(amount)||amount<=0||amount>1e10)fail('Importo non valido');const keys=Object.keys(weights);if(!keys.length||keys.some(k=>!Number.isInteger(weights[k])||weights[k]<0)||keys.reduce((n,k)=>n+weights[k],0)!==10000)fail('Le quote devono sommare al 100%');const rows=keys.map((k,i)=>({k,i,v:Math.floor(amount*weights[k]/10000),r:amount*weights[k]%10000}));let rest=amount-rows.reduce((n,x)=>n+x.v,0);for(const x of [...rows].sort((a,b)=>b.r-a.r||a.i-b.i)){if(rest-->0)x.v++}return Object.fromEntries(rows.map(x=>[x.k,x.v]))}
 function twoShares(amount,members,payer,value){if(members.length!==2||!members.includes(payer))fail('La percentuale libera richiede due partecipanti');const b=percent(value);return allocate(amount,Object.fromEntries(members.map(n=>[n,n===payer?b:10000-b])))}
 function balance(a,movements){const anchor=a.balanceDate;if(!anchor)return null;return Number(a.balance||0)+movements.filter(m=>m.account===a.name&&(m.date>anchor||m.date===anchor&&a.includeAnchorDay!==false)).reduce((n,m)=>n+(m.kind==='income'?m.amount:-m.amount),0)}
-function familySummary(f,entries,name){const rows=entries.filter(x=>x.familyId===f.id);if(f.mode==='real')return {balance:Number(f.opening||0)+rows.reduce((n,x)=>n+Number(x.delta||0),0),position:null};return {balance:null,position:rows.reduce((n,x)=>n+(x.payer===name?Number(x.amount||0):0)-Number(x.shares?.[name]||0),0)}}
+function familySummary(f,entries,name){
+ const rows=entries.filter(x=>x.familyId===f.id);
+ if(f.mode==='real')return {balance:Number(f.opening||0)+rows.reduce((n,x)=>n+Number(x.delta||0),0),position:null};
+ const norm=value=>String(value||'').trim().toLocaleLowerCase('it-IT');
+ const position=rows.reduce((total,row)=>total+(norm(row.payer)===norm(name)?Number(row.amount||0):0)-Object.entries(row.shares||{}).reduce((sum,[member,amount])=>sum+(norm(member)===norm(name)?Number(amount||0):0),0),0);
+ return {balance:null,position,totalSpent:rows.reduce((total,row)=>total+Number(row.amount||0),0)};
+}
 function validateExpense(x,identity){
  if(!x||typeof x.id!=='string'||! /^[a-zA-Z0-9:_-]{1,150}$/.test(x.id))fail('Identificativo movimento non valido');
  if(!/^\d{4}-\d{2}-\d{2}$/.test(x.date)||Number.isNaN(Date.parse(x.date))||new Date(x.date).toISOString().slice(0,10)!==x.date)fail('Data non valida');

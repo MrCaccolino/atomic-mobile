@@ -91,7 +91,7 @@
     const namespace = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(namespace, 'svg');
     svg.setAttribute('viewBox', `-4 -4 ${count + 8} ${count + 8}`);
-    svg.setAttribute('width', '350');
+    svg.setAttribute('width', '520');
     svg.style.maxWidth = '100%';
     const background = document.createElementNS(namespace, 'rect');
     background.setAttribute('x', '-4');

@@ -6,17 +6,20 @@
   const panel = document.createElement('section');
   panel.className = 'panel';
   panel.innerHTML = `<h2>Trasferisci con il PC</h2>
-    <p>Esporta le spese, importale nel programma Windows, poi carica qui il file dei saldi del tuo profilo.</p>
+    <p>Mostra i QR alla webcam del PC oppure trasferisci le spese tramite file. Ricevi conti e saldi con il QR del PC o con il file del tuo profilo.</p>
     <button id="exportExpenses">Esporta spese per il PC</button>
     <button id="importReceipt">Importa saldi dal PC</button>
     <input id="receiptFile" type="file" accept=".json,application/json" hidden>
     <p id="qrMobileStatus" role="status"></p>
-    <details><summary>Trasferisci una spesa con QR</summary>
-      <p>Mostra il codice alla webcam del PC. Per aggiornare il saldo puoi usare il file dei saldi.</p>
-      <button id="qrNext">Mostra prossima spesa</button>
-      <div id="qrMobileCanvas"></div>
-    </details>`;
+`;
   $('dashboard').append(panel);
+  const qrDialog=document.createElement('dialog');
+  qrDialog.id='qrDisplay';
+  qrDialog.innerHTML='<div class="sectionhead"><h2>QR spesa per il PC</h2><button id="closeQrDisplay" class="secondary">Chiudi</button></div><p id="qrExpenseDescription"></p><div id="qrMobileCanvas"></div><p id="qrDisplayStatus" role="status">Tieni il QR fermo davanti alla webcam del PC.</p><button id="qrNext" class="wide">Mostra spesa successiva</button>';
+  document.body.append(qrDialog);
+  $('closeQrDisplay').onclick=()=>qrDialog.close();
+  $('showExpenseQR').onclick=()=>{qrDialog.showModal();$('qrNext').click()};
+
   const setup = document.createElement('section');
   setup.className = 'panel';
   setup.innerHTML = `<button id="importConfig">Importa configurazione dal PC</button>
@@ -26,6 +29,7 @@
   function status(text) {
     $('qrMobileStatus').textContent = text;
     $('message').textContent = text;
+    $('qrDisplayStatus').textContent=text;
     setup.hidden = !!mobile.getData()?.identity;
   }
   async function applyReceipt(packet) {
@@ -84,9 +88,10 @@
       const data = mobile.getData();
       if (!data.identity || data.transport !== 'qr') throw Error('Associa prima il profilo al PC');
       const pending = data.expenses.filter(item => !data.confirmed.includes(item.id));
-      if (!pending.length) return status('Nessuna spesa in attesa.');
+      if (!pending.length) {$('qrMobileCanvas').replaceChildren();return status('Nessuna spesa in attesa.');}
       const expense = pending[position % pending.length];
       position++;
+      $('qrExpenseDescription').textContent='Spesa '+((position-1)%pending.length+1)+' di '+pending.length+' · '+expense.description;
       const packet = await transfer.sign(data.credential, { v: 1, type: 'expense', deviceId: data.deviceId, expense });
       $('qrMobileCanvas').replaceChildren(transfer.draw('ATQ1:' + await transfer.pack(packet)));
       status('Mostra il QR alla webcam del PC · ' + expense.description);

@@ -1,4 +1,4 @@
-ATOMIC MOBILE 1.0.70 — ABBINARE A FAMILY WELLNESS STUDIO 1.0.70
+ATOMIC MOBILE 1.0.71 — ABBINARE A FAMILY WELLNESS STUDIO 1.0.71
 
 PUBBLICAZIONE
 1. Estrai questo ZIP sul PC.
@@ -10,7 +10,7 @@ PUBBLICAZIONE
    Il repository deve contenere i file estratti: se l’elenco è vuoto il sito restituisce 404.
    Un telefono già configurato può continuare ad aprire la copia offline.
 5. Apri in Safari https://mrcaccolino.github.io/atomic-mobile/FamilyWellnessMobile.html
-   La schermata Impostazioni deve indicare 1.0.70. Il messaggio in fondo indica
+   La schermata Impostazioni deve indicare 1.0.71. Il messaggio in fondo indica
    quando l'app è pronta per l'apertura offline.
 
 PRIMO COLLEGAMENTO
@@ -47,7 +47,7 @@ profilo arrivano con la configurazione e con i riepiloghi dei saldi.
 
 La prima pubblicazione e gli aggiornamenti richiedono Internet.
 Lo scambio delle spese avviene tramite file e l'EXE include il proprio runtime.
-Il pacchetto Windows e quello mobile vanno aggiornati insieme alla versione 1.0.70.
+Il pacchetto Windows e quello mobile vanno aggiornati insieme alla versione 1.0.71.
 
 VERIFICHE
 Completati test automatici su due telefoni simulati, conti personali e famiglia,
@@ -55,3 +55,16 @@ duplicati, firme dei file, saldi obsoleti, backup e ripristino.
 Verificati gli asset della cache offline e l'apertura tramite quattro URL.
 Resta da collaudare l'esecuzione nativa Windows, Safari/iOS e l'installazione Home
 sui dispositivi reali. L'avvio dell'EXE su PC aziendale dipende dalle relative autorizzazioni.
+
+AGGIORNARE CONTI E SALDI SU UN TELEFONO GIÀ ASSOCIATO
+Nel programma Windows seleziona il telefono e premi Aggiorna conti e saldi via QR.
+Inquadra il QR con la Fotocamera dell’iPhone e apri il collegamento. Il conto famiglia
+appare sia nel riepilogo sia nel menu delle spese condivise.
+Il saldo dei conti virtuali indica il tuo credito/debito. Sono visibili anche le spese
+condivise complessive. I conti reali mostrano invece il loro saldo condiviso.
+
+TRASFERIRE CON QR
+Mostra QR spese è ora un pulsante nella pagina principale. Il QR si apre grande.
+Sul PC scegli Leggi QR spese con webcam. Dopo l’importazione, inquadra con
+la Fotocamera dell’iPhone il QR di conferma mostrato sul PC.
+Mantieni il codice grande e fermo nella ripresa e regola la luminosità dello schermo.
