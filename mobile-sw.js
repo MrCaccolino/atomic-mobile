@@ -1,5 +1,0 @@
-const CACHE='atomic-mobile-qr-clean-20261118-1';
-const ASSETS=["./FamilyWellnessMobile.html", "./mobile.js", "./mobile.css", "./mobile-manifest.webmanifest", "./atomic-mobile-icon.svg", "./atomic-mobile-192.png", "./atomic-mobile-512.png", "./sync/config.js", "./sync/core.js", "./sync/transport.js", "./sync/qr-mobile.js", "./sync/qr.js"];
-self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS))));
-self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('atomic-mobile-')&&k!==CACHE).map(k=>caches.delete(k))))));
-self.addEventListener('fetch',e=>{const url=new URL(e.request.url);if(e.request.method!=='GET'||url.origin!==self.location.origin)return;const asset=ASSETS.find(a=>new URL(a,self.registration.scope).pathname===url.pathname);if(e.request.mode==='navigate'){e.respondWith(caches.open(CACHE).then(c=>c.match('./FamilyWellnessMobile.html')).then(r=>r||fetch(e.request)));return}if(asset)e.respondWith(caches.open(CACHE).then(c=>c.match(asset)).then(r=>r||fetch(e.request)));});
