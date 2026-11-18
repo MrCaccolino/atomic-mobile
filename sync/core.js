@@ -12,9 +12,11 @@ function familySummary(f,entries,name){
  const rows=entries.filter(x=>x.familyId===f.id);
  if(f.mode==='real')return {balance:Number(f.opening||0)+rows.reduce((n,x)=>n+Number(x.delta||0),0),position:null};
  const norm=value=>String(value||'').trim().toLocaleLowerCase('it-IT');
- const position=rows.reduce((total,row)=>total+(norm(row.payer)===norm(name)?Number(row.amount||0):0)-Object.entries(row.shares||{}).reduce((sum,[member,amount])=>sum+(norm(member)===norm(name)?Number(amount||0):0),0),0);
- const totalSpent=rows.reduce((total,row)=>total+Number(row.amount||0),0);
- return {balance:null,position,totalSpent,...(f.hasOpeningBalance?{sharedBalance:Number(f.opening||0)-totalSpent,opening:Number(f.opening||0)}:{})};
+ const debt=f.openingDebt;
+ const opening=debt&&Number.isSafeInteger(debt.amount)&&debt.amount>=0?(norm(debt.creditor)===norm(name)?debt.amount:0)-(norm(debt.debtor)===norm(name)?debt.amount:0):0;
+ const position=rows.reduce((total,row)=>row.kind==='settlement'?total+(norm(row.debtor)===norm(name)?Number(row.amount||0):0)-(norm(row.creditor)===norm(name)?Number(row.amount||0):0):total+(norm(row.payer)===norm(name)?Number(row.amount||0):0)-Object.entries(row.shares||{}).reduce((sum,[member,amount])=>sum+(norm(member)===norm(name)?Number(amount||0):0),0),opening);
+ const totalSpent=rows.filter(row=>row.kind!=='settlement').reduce((total,row)=>total+Number(row.amount||0),0);
+ return {balance:null,position,totalSpent,openingPosition:opening,openingDebt:debt||null,openingNeedsReview:!!f.hasOpeningBalance&&!debt};
 }
 function validateExpense(x,identity){
  if(!x||typeof x.id!=='string'||! /^[a-zA-Z0-9:_-]{1,150}$/.test(x.id))fail('Identificativo movimento non valido');

@@ -1,4 +1,4 @@
-const CACHE = 'atomic-mobile-files-1.0.72-20261118';
+const CACHE = 'atomic-mobile-files-1.0.75-20261118';
 const ASSETS = ['./', './index.html', './FamilyWellnessMobile.html', './mobile.js', './mobile.css',
   './mobile-manifest.webmanifest', './atomic-mobile-icon.svg', './atomic-mobile-192.png',
   './atomic-mobile-512.png', './sync/config.js', './sync/categories.js', './sync/core.js', './sync/transport.js',
