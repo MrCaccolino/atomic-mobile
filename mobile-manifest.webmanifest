@@ -1,0 +1,22 @@
+{
+  "id": "./",
+  "name": "Atomic Mobile — Family Wellness",
+  "short_name": "Atomic",
+  "start_url": "./FamilyWellnessMobile.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#090611",
+  "theme_color": "#10091d",
+  "icons": [
+    {
+      "src": "atomic-mobile-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "atomic-mobile-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
