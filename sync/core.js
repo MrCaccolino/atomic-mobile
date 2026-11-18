@@ -14,9 +14,30 @@ function familySummary(f,entries,name){
  const norm=value=>String(value||'').trim().toLocaleLowerCase('it-IT');
  const debt=f.openingDebt;
  const opening=debt&&Number.isSafeInteger(debt.amount)&&debt.amount>=0?(norm(debt.creditor)===norm(name)?debt.amount:0)-(norm(debt.debtor)===norm(name)?debt.amount:0):0;
- const position=rows.reduce((total,row)=>row.kind==='settlement'?total+(norm(row.debtor)===norm(name)?Number(row.amount||0):0)-(norm(row.creditor)===norm(name)?Number(row.amount||0):0):total+(norm(row.payer)===norm(name)?Number(row.amount||0):0)-Object.entries(row.shares||{}).reduce((sum,[member,amount])=>sum+(norm(member)===norm(name)?Number(amount||0):0),0),opening);
- const totalSpent=rows.filter(row=>row.kind!=='settlement').reduce((total,row)=>total+Number(row.amount||0),0);
+ const position=rows.reduce((total,row)=>{total+=Object.entries(row.balanceCorrection||{}).reduce((v,[n,a])=>v+(norm(n)===norm(name)?a:0),0);return row.positions?total+Object.entries(row.positions).reduce((v,[n,a])=>v+(norm(n)===norm(name)?a:0),0):row.kind==='settlement'?total+(norm(row.debtor)===norm(name)?Number(row.amount||0):0)-(norm(row.creditor)===norm(name)?Number(row.amount||0):0):total+(norm(row.payer)===norm(name)?Number(row.amount||0):0)-Object.entries(row.shares||{}).reduce((sum,[member,amount])=>sum+(norm(member)===norm(name)?Number(amount||0):0),0)},opening);
+ const totalSpent=rows.filter(row=>row.kind!=='settlement'&&!row.positions).reduce((total,row)=>total+Number(row.amount||0),0);
  return {balance:null,position,totalSpent,openingPosition:opening,openingDebt:debt||null,openingNeedsReview:!!f.hasOpeningBalance&&!debt};
+}
+function legacyFamily(data,name,profileId){
+ const ledger=data.familyLedger||[],movements=data.movements||[];
+ if(!ledger.length&&!movements.some(m=>m.sharedFamily&&!m.familySplit&&!m.familyId))return null;
+ const norm=x=>String(x||'').trim().toLocaleLowerCase('it-IT');
+ const other=ledger.map(x=>x.payer).find(n=>n&&norm(n)!==norm(name)&&!['io','me'].includes(norm(n)))||'Altro partecipante';
+ const id='legacy-family:'+profileId,opening=ledger.find(x=>x.id==='opening'),amount=Number(opening?.amount)||0;
+ const f={id,name:'Conto famiglia storico',mode:'virtual',members:[name,other],legacyOwner:name,opening:0,hasOpeningBalance:false,openingDebt:{amount:Math.abs(amount),creditor:amount>=0?name:other,debtor:amount>=0?other:name,date:opening?.date||movements.map(x=>x.date).sort()[0]||new Date().toISOString().slice(0,10)}};
+ const entries=[];
+ const shares=(a,pct)=>{const own=Math.round(a*Math.max(0,Math.min(100,Number(pct??50)))/100);return {[name]:own,[other]:a-own}};
+ for(const m of movements)if(m.kind==='expense'&&m.sharedFamily&&!m.familySplit&&!m.familyId)entries.push({...m,id:'legacy-movement:'+m.id,familyId:id,mode:'virtual',kind:'split',payer:name,actor:name,shares:shares(m.amount,m.myShare),sourceMovementId:m.id,delta:0});
+ for(const x of ledger){
+  if(x.id==='opening')continue;
+  const payer=['io','me',norm(name)].includes(norm(x.payer))?name:x.payer||other;
+  const base={...x,id:'legacy-ledger:'+x.id,legacySourceId:x.id,familyId:id,mode:'virtual',payer,actor:name,account:x.bank||'',category:x.category||'Spese familiari',delta:0};
+  const linked=movements.find(m=>m.sourceFamilyId===x.id||m.id==='family-shared:'+x.id||m.id==='family-settlement:'+x.id);if(linked)base.sourceMovementId=linked.id;
+  if(['shared','wife'].includes(x.kind))entries.push({...base,kind:'split',shares:shares(x.amount,x.myShare)});
+  else{const delta=x.kind==='wifeAdvance'?-x.amount:x.kind==='myAdvance'?x.amount:x.kind==='settlementReceived'?-x.amount:x.kind==='settlementPaid'?x.amount:x.kind==='adjustment'?x.amount:0;entries.push({...base,kind:'adjustment',positions:{[name]:delta,[other]:-delta}})}
+ }
+ for(const entry of entries){if(!entry.shares)continue;const desired=entry.payer===name?Math.round(entry.amount*(100-Number(entry.myShare??50))/100):-Math.round(entry.amount*Number(entry.myShare??50)/100);const current=(entry.payer===name?entry.amount:0)-entry.shares[name];const correction=desired-current;if(correction)entry.balanceCorrection={[name]:correction,[other]:-correction}}
+ return {family:f,entries};
 }
 function validateExpense(x,identity){
  if(!x||typeof x.id!=='string'||! /^[a-zA-Z0-9:_-]{1,150}$/.test(x.id))fail('Identificativo movimento non valido');
@@ -40,5 +61,5 @@ function planExpense(x,identity){const clean=validateExpense(x,identity),f=ident
  return {clean,personal,family};
 }
 function migrateLegacy(raw){const d=clone(raw);if(!Array.isArray(d.expenses))fail('Archivio precedente non valido');return {schema:2,legacy:d,expenses:[],confirmed:[],history:[],identity:null,lastSync:null,issues:[],deviceId:crypto.randomUUID()}}
-const api={canonical,percent,allocate,twoShares,balance,familySummary,validateExpense,planExpense,migrateLegacy};root.AtomicCore=api;if(typeof module!=='undefined')module.exports=api;
+const api={legacyFamily,canonical,percent,allocate,twoShares,balance,familySummary,validateExpense,planExpense,migrateLegacy};root.AtomicCore=api;if(typeof module!=='undefined')module.exports=api;
 })(globalThis);

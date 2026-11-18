@@ -5,7 +5,15 @@ function write(next){const raw=JSON.stringify(next);localStorage.setItem(KEY,raw
 function mutate(fn){const next=structuredClone(data);fn(next);write(next)}
 function initial(){const raw=localStorage.getItem(KEY);if(raw){const d=JSON.parse(raw);if(d.schema!==2||!Array.isArray(d.expenses)||!Array.isArray(d.confirmed))throw Error('Archivio non riconosciuto. I dati non sono stati modificati.');return d}const d={schema:2,deviceId:crypto.randomUUID(),identity:null,expenses:[],confirmed:[],history:[],lastSync:null,issues:[]};write(d);return d}
 function pending(){return data.expenses.filter(x=>!data.confirmed.includes(x.id))}
-function render(){const i=data.identity;$('dashboard').hidden=!i;$('greeting').textContent=i?'Ciao, '+i.name+'.':'Benvenuto.';$('identityHint').textContent=i?'Le tue spese, sempre con te.':'Dal programma sul PC scegli «Collega smartphone» e inquadra il tuo QR personale.';if(!i)return;
+const ARCHIVES_KEY='atomic-mobile-previous-archives-v76';
+function previousArchives(){return JSON.parse(localStorage.getItem(ARCHIVES_KEY)||'[]')}
+function renderPreviousArchives(){
+ let box=$('previousArchives');if(!box){box=document.createElement('section');box.id='previousArchives';$('settings').append(box)}
+ box.replaceChildren();const items=previousArchives();if(!items.length)return;
+ const heading=document.createElement('h3');heading.textContent='Archivi precedenti conservati';box.append(heading);
+ items.forEach((item,index)=>{const button=document.createElement('button');button.className='secondary';button.textContent='Scarica '+item.data.identity.name+' · '+new Date(item.savedAt).toLocaleString('it-IT');button.onclick=()=>{const blob=new Blob([JSON.stringify({format:'ATOMIC_MOBILE_BACKUP',version:2,createdAt:item.savedAt,data:item.data},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Atomic-Mobile-archivio-precedente-'+index+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),5000)};box.append(button)});
+}
+function render(){renderPreviousArchives();const i=data.identity;$('dashboard').hidden=!i;$('greeting').textContent=i?'Ciao, '+i.name+'.':'Benvenuto.';$('identityHint').textContent=i?'Le tue spese, sempre con te.':'Dal programma sul PC scegli «Collega smartphone» e inquadra il tuo QR personale.';if(!i)return;
  $('identityHint').textContent='Telefono '+data.deviceId.slice(0,8)+' · '+(data.lastSync?'Conti aggiornati '+new Date(data.lastSync).toLocaleString('it-IT'):'Conti ricevuti alla prima associazione');
  options($('category'),(i.categories||ATOMIC_CATEGORIES).map(name=>({id:name,name})));
  const balances=i.accounts.filter(a=>a.type!=='crypto').map(a=>a.balance);$('personalBalance').textContent=balances.length&&balances.every(Number.isSafeInteger)?eur(balances.reduce((n,v)=>n+v,0)):'Saldo non ancora sincronizzato';$('balanceDate').textContent=data.lastSync?'Aggiornato '+new Date(data.lastSync).toLocaleString('it-IT'):'Saldo non ancora sincronizzato';$('familyBalances').replaceChildren();
@@ -133,13 +141,16 @@ window.AtomicMobileQR={
  setIdentity(payload) {
   validIdentity(payload?.identity);
   if(!/^[a-f0-9-]{36}$/.test(payload.deviceId)||!/^[a-f0-9]{64}$/.test(payload.secret))throw Error('Associazione non valida');
-  if(data.identity&&(data.identity.profileId!==payload.identity.profileId||data.identity.householdId!==payload.identity.householdId))throw Error('Profilo diverso: dati conservati');
-  if(data.expenses.length&&data.deviceId!==payload.deviceId)throw Error('Questo telefono ha già movimenti: conserva il backup e completa la sincronizzazione prima di cambiare associazione');
-  if(data.deviceId===payload.deviceId&&data.identity) {
-   if(data.credential!==payload.secret)throw Error('Credenziale diversa per lo stesso telefono');
-   return;
+  const different=data.identity&&(data.identity.profileId!==payload.identity.profileId||data.identity.householdId!==payload.identity.householdId||data.deviceId!==payload.deviceId);
+  if(different){
+   const unsent=pending().length;
+   if(!confirm('Collegare questo telefono a '+payload.identity.name+' nell’archivio aperto sul PC? Il precedente archivio'+(unsent?' con '+unsent+' spese da inviare':'')+' sarà conservato separatamente e scaricabile dalle Impostazioni. Le vecchie spese non saranno inviate al nuovo archivio.'))throw Error('Collegamento annullato. Archivio precedente conservato.');
+   const archives=previousArchives();archives.push({savedAt:new Date().toISOString(),data:structuredClone(data)});const raw=JSON.stringify(archives);localStorage.setItem(ARCHIVES_KEY,raw);if(localStorage.getItem(ARCHIVES_KEY)!==raw)throw Error('Impossibile conservare il precedente archivio. Collegamento interrotto.');
+   write({schema:2,deviceId:payload.deviceId,identity:payload.identity,credential:payload.secret,transport:'qr',expenses:[],confirmed:[],history:[],issues:[],receiptRevision:0,lastSync:new Date().toISOString()});
+  }else{
+   if(data.identity&&data.deviceId===payload.deviceId&&data.credential!==payload.secret)throw Error('Credenziale diversa per lo stesso telefono');
+   mutate(d=>{d.identity=payload.identity;d.deviceId=payload.deviceId;d.credential=payload.secret;d.transport='qr';d.lastSync=new Date().toISOString();if(!d.receiptRevision)d.receiptRevision=0});
   }
-  mutate(d=>{d.identity=payload.identity;d.deviceId=payload.deviceId;d.credential=payload.secret;d.transport='qr';d.receiptRevision=0});
   render();
   message('Profilo associato.');
  }
@@ -161,7 +172,7 @@ try{data=initial();render();/* Only QR provisioning is supported in this clean e
  const offline=document.createElement('p');offline.id='offlineStatus';offline.className='muted';offline.setAttribute('role','status');document.querySelector('main').append(offline);
  offline.textContent='Preparazione apertura offline…';
  navigator.serviceWorker.register('./mobile-sw.js',{updateViaCache:'none'}).then(()=>navigator.serviceWorker.ready).then(()=>{
-  offline.textContent='App pronta per l’apertura offline · 1.0.75';
+  offline.textContent='App pronta per l’apertura offline · 1.0.76';
  }).catch(e=>{offline.textContent='Apertura offline da verificare: '+e.message});
  let refreshing=false;
  navigator.serviceWorker.addEventListener('controllerchange',()=>{

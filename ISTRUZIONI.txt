@@ -1,11 +1,11 @@
-ATOMIC MOBILE 1.0.75 — ABBINARE ALL’EXE 1.0.75
+ATOMIC MOBILE 1.0.76 — ABBINARE ALL’EXE 1.0.76
 
 PUBBLICAZIONE
 Estrai questo ZIP. Carica tutti i file e le cartelle sync e sync/vendor nella radice
 del repository atomic-mobile, sovrascrivendo i file con lo stesso nome.
 index.html e FamilyWellnessMobile.html devono essere direttamente nella radice.
 Attendi che GitHub Pages completi la pubblicazione.
-Chiudi e riapri Atomic Mobile: deve indicare 1.0.75.
+Chiudi e riapri Atomic Mobile: deve indicare 1.0.76.
 
 TELEFONO GIÀ ASSOCIATO
 Apri Atomic Mobile. Sotto il saluto trovi il codice del telefono.
@@ -38,7 +38,12 @@ Sono disponibili anche Esporta file spese e Importa saldi dal PC.
 Le spese esportate restano in coda fino alla conferma del programma Windows.
 I QR e i backup di configurazione contengono dati personali. Conservali privati.
 
-SALDO FAMILIARE 1.0.75
+SALDO FAMILIARE 1.0.76
 I conti virtuali mostrano il tuo credito da ricevere o debito da restituire,
 incluso il saldo iniziale attribuito a debitore e creditore sul desktop.
 Dopo la pubblicazione aggiorna conti e saldi dal desktop con il QR.
+
+ARCHIVI DIVERSI
+Scansionando il QR del nuovo archivio del PC puoi confermare il cambio.
+Il precedente archivio e le spese in attesa sono conservati separatamente
+e scaricabili nelle Impostazioni > Archivi precedenti conservati.
