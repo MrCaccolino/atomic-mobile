@@ -1,0 +1,44 @@
+VERIFICHE E LIMITI — VERSIONE 1.0.78
+
+VERIFICATO AUTOMATICAMENTE
+- Prelievo 100 EUR: diminuzione del conto di origine, aumento della cassa,
+  patrimonio invariato, nessun reddito o consumo e nessuna quota familiare generata.
+- Modifica dei due movimenti collegati, commissione separata, annullamento del
+  capitale, rifiuto del doppio annullamento e storno separato della commissione.
+- Esportazione/importazione dei trasferimenti, ripetizione senza duplicati e
+  rifiuto dei conflitti. Ritorno coerente anche con commissione gia' stornata.
+- Storni personali e condivisi: conto compensato, quote corrette, originale
+  conservato e non ricontato nei consumi; rifiuto del doppio storno.
+- Interruzione simulata fra correzione delle quote e scrittura del conto:
+  recupero ripetibile al riaccesso. Saldi non esportabili finche' lo storno e' incompleto.
+- Lotto di spese firmato, frammentato in QR meno densi, ricomposizione con ordine
+  misto e frammenti ripetuti; immagini QR decodificate dopo lieve sfocatura.
+- Percorso webcam simulato attraverso i controlli dell'interfaccia: QR estranei
+  e incompleti non importati, lotto completo importato una sola volta.
+- Riepilogo con saldi reali del profilo, contanti e credito/debito familiare.
+- Corretta conferma delle spese anche quando si usa Aggiorna conti e saldi o
+  si importa un file: corretto il precedente elenco vuoto di conferme nei QR.
+- Storno condiviso trasmesso al telefono: conto ripristinato, quote aggiornate,
+  originale contrassegnato Stornato e rettifica visibile.
+- Ricezione sul telefono e conferma firmata facoltativa al PC; rifiuto di ricevute
+  appartenenti ad altri dispositivi o precedenti al riepilogo gia' applicato.
+- Riapertura dell'app con spese in attesa conservate; backup del telefono importabile
+  anche dalla schermata iniziale; archivi diversi conservati separatamente.
+- Gestione webcam con dispositivi e permessi simulati: scelta dispositivo,
+  risoluzione effettiva, autofocus continuo se disponibile, fallback dei vincoli,
+  rifiuto dei permessi e rilascio delle risorse.
+- Browser Chromium reale: form di trasferimento e commissione, riepiloghi, finestre
+  980/1200/1500 px, primo collegamento tramite un flusso video sintetico con QR
+  realmente decodificato, dialogo mobile a 320/390 px senza sovrapposizioni orizzontali.
+- Installazione e aggiornamento della cache offline, percorsi di apertura e risorse.
+- Regressione sul backup originale: conto storico conservato una sola volta,
+  saldo storico e patrimonio invariati dopo la migrazione.
+
+DA PROVARE SUI DISPOSITIVI DELL'UTENTE
+- Lettura tramite la webcam fisica del PC, relativo driver e messa a fuoco reale.
+- Qualita' della ripresa del display dell'iPhone nelle condizioni d'uso effettive.
+- Permessi e persistenza della specifica installazione Home di Safari/iOS.
+- Avvio dell'eseguibile sul PC Windows dell'utente. In questo ambiente la logica
+  della shell e l'interfaccia Chromium sono state verificate, non l'hardware Windows.
+
+Le prove su video e dispositivi simulati non certificano la webcam fisica.

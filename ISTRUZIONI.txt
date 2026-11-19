@@ -1,0 +1,95 @@
+ATOMIC MOBILE 1.0.78 — PUBBLICAZIONE
+
+Estrai lo ZIP e pubblica tutti i file e le cartelle sync e sync/vendor nella
+radice del repository atomic-mobile, con index.html direttamente nella radice.
+Attendi GitHub Pages, verifica 1.0.78 sul telefono e riapri l’app.
+
+FAMILY WELLNESS STUDIO / ATOMIC MOBILE 1.0.78
+TRASFERIMENTI, STORNI E PROCEDURA SPESE-SALDI
+
+AGGIORNAMENTO
+Chiudi il programma e avvia l'EXE dopo aver estratto tutto lo ZIP in una nuova
+cartella. Apri il tuo archivio attuale dal menu Archivio e accedi al profilo.
+Pubblica tutti i file e le cartelle del pacchetto Atomic Mobile 1.0.78 sul sito
+GitHub Pages. Sul telefono verifica la versione 1.0.78, poi chiudi e riapri l'app.
+Gli archivi e le associazioni gia' presenti restano conservati.
+
+TRASFERIMENTI E PRELIEVI
+In Entrate e spese oppure Patrimonio e conti premi:
+  Trasferisci tra conti / Preleva contanti
+Scegli Da conto, A conto, Data, Importo e l'eventuale Commissione separata.
+Premi Salva trasferimento.
+Esempio: Intesa 1.000 EUR e Contanti 20 EUR. Trasferendo 100 EUR, Intesa diventa
+900 EUR e Contanti 120 EUR. Il totale resta 1.020 EUR; redditi, consumi e quote
+familiari non cambiano. Una commissione di 2 EUR e' invece una spesa separata.
+Le due righe hanno lo stesso identificativo Trasferimento e sono collegate.
+Da Gestisci trasferimento puoi modificarle insieme o premere Annulla
+trasferimento. L'annullamento registra due movimenti opposti in data odierna;
+la commissione resta una spesa, salvo storno separato effettivamente necessario.
+Esporta trasferimenti / Importa trasferimenti consentono uno scambio JSON
+tra archivi compatibili dello stesso profilo. Un ID gia' presente e identico
+non viene duplicato; dati diversi per lo stesso ID vengono segnalati come conflitto.
+L'archivio famiglia completo conserva anche tutto il restante storico.
+
+STORNI
+In Entrate e spese premi Storna sulla riga originale, scegli la data e premi
+Conferma storno. Per le commissioni trovi Storna commissione.
+Lo storno compensa il conto e le eventuali quote familiari. L'originale resta
+visibile come Stornato e viene escluso dai consumi; la compensazione resta
+collegata all'originale. Per una rettifica registra poi il movimento corretto.
+Un movimento gia' stornato non puo' essere stornato nuovamente.
+Per le spese condivise usa il profilo del pagatore e il movimento del conto
+che ha pagato. Il trasferimento tra conti si annulla da Gestisci trasferimento.
+Un'operazione condivisa interrotta viene recuperata al successivo accesso al
+profilo; finche' e' incompleta il programma impedisce di inviare saldi parziali.
+
+COLLEGAMENTO INIZIALE — UNA SOLA VOLTA
+Se il telefono e' gia' collegato al profilo e all'archivio corretti, passa al punto 2.
+1. Sul PC apri Collega smartphone, scegli Profilo e Genera QR per nuovo telefono.
+   Apri Atomic Mobile dall'icona Home e premi Collega dal QR del PC.
+   Inquadra il QR: devono comparire il nome corretto e i saldi del tuo archivio.
+   Restano disponibili Importa configurazione o backup e il file del PC.
+   Il backup di Atomic Mobile scaricato da Safari e' riconosciuto anche qui.
+
+INVIO DELLE SPESE E RITORNO DEI SALDI
+2. Telefono: Mostra QR spese. PC: Leggi QR spese con webcam.
+   Scegli la Webcam e consenti l'accesso. Tieni il telefono fermo: i brevi QR
+   del lotto scorrono automaticamente. Puoi usare Pausa sequenza e QR successivo.
+   Il PC mostra Ricezione spesa: X di Y QR, poi N confermate dopo aver importato.
+   Non passare al lotto seguente prima della conferma di importazione del PC.
+3. Il PC presenta automaticamente il QR con conferme e saldi.
+   Nel dialogo del telefono premi Leggi conferma e saldi dal PC.
+   Inquadra il monitor e attendi tutti i frammenti del riepilogo.
+   Risultato sul telefono: Conferme e saldi ricevuti dal PC, conteggio confermate,
+   spese ancora da inviare e valori aggiornati di banche, contanti e quote familiari.
+   Se restano altre spese, ripeti i punti 2 e 3 per il lotto successivo.
+4. Per aggiornare solo i saldi dopo modifiche sul PC, seleziona il codice del tuo
+   telefono e premi Aggiorna conti e saldi via QR. Sul telefono usa Aggiorna conti
+   e saldi · Leggi QR PC. Non serve generare un nuovo QR di collegamento.
+
+VERIFICA FACOLTATIVA ANCHE SUL PC
+Il PC sa di avere generato il riepilogo; la ricezione va verificata sul telefono.
+Se desideri registrare l'esito anche sul PC, sul telefono premi Mostra conferma
+di ricezione al PC (facoltativo) e fai leggere quel QR alla webcam del PC.
+Il PC mostrera' Ricezione saldi verificata e i conteggi comunicati dal telefono.
+
+ALTERNATIVA TRAMITE FILE
+Telefono: Esporta file spese. Porta il file sul PC e usa Importa file spese.
+Per un solo telefono il PC prepara automaticamente il QR di ritorno.
+Puoi invece usare Esporta saldi aggiornati, portare quel file sul telefono e
+premere Importa saldi dal PC. Le spese restano in attesa fino alla conferma ricevuta.
+
+CHE COSA E' AUTOMATICO
+Il salvataggio delle spese sul telefono e' automatico. Sul PC l'importazione di
+un lotto valido prepara automaticamente il riepilogo da riportare al telefono.
+Il passaggio dei dati tra dispositivi richiede QR o file: non e' una sincronizzazione
+in background via Wi-Fi. Generare un QR non significa che il telefono lo abbia letto.
+Controlla nome, codice Archivio e codice Telefono indicati su entrambe le schermate.
+La data sul telefono e' la data del riepilogo ricevuto dal PC, non una verifica bancaria.
+
+WEBCAM
+Dopo il primo consenso puoi fermare la webcam, selezionarne un'altra e riavviare.
+Il programma indica la risoluzione acquisita e usa la messa a fuoco continua se
+supportata. Un rifiuto dei permessi o una webcam occupata produce un messaggio
+specifico; resta disponibile il file spese. La webcam viene fermata alla chiusura.
+Per la prova fisica mantieni tutto il QR, compresi i margini bianchi, nell'inquadratura.
